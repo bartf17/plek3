@@ -1,523 +1,3 @@
-ChatGPT
-
-Ik wil weer een html pagina maken met daarin de resterende drie duels die belangrijk zijn om plek drie, om zo alle scenario's te laten zien voor de slotdag.
-
-Dit is de stand vooraf:
-
-3	FC Twente	58	23
-4	N.E.C.	56	23
-5	Ajax	55	21
-
-Dit zijn de wedstrijden van zondag:
-
-PSV - FC Twente
-N.E.C. - Go Ahead Eagles
-sc Heerenveen - Ajax
-
-De pagina moet koppen met 'De strijd om plek drie'
-
-Daarna een korte uitleg
-
-Daarna een blok met de drie duels, waarin je per wedstrijd kunt kiezen uit bijv. winst PSV - gelijkspel - winst Twente
-
-Rechts daarvan wil ik de stand, die automatisch update als je een resultaat wijzigt.
-
-Er zijn in totaal 27 scenario's (3 wedstrijden met 3 verschillende opties)
-
-Geef in een heen klein blokje aan welk van die scenario's is gekozen.
-
-Maak hier een eerste versie van een dynamische html van
-
-Ik zet dit op als één zelfstandige HTML-pagina met ingebouwde CSS en JavaScript. Ik ga uit van doelsaldo als tweede kolom na punten en laat bij gelijke punten de huidige volgorde op doelsaldo en daarna vaste startvolgorde beslissen.
-
-Ik heb een eerste werkende versie in canvas gezet.
-
-Belangrijkste aannames in deze versie:
-
-    De stand sorteert op punten.
-
-    Bij gelijke punten sorteert hij nu op het huidige doelsaldo.
-
-    Als punten en doelsaldo gelijk zijn, blijft de huidige startvolgorde staan.
-
-    Doelsaldo verandert nog niet mee met gekozen uitslagen, omdat we nu alleen resultaatopties kiezen en geen exacte score.
-
-De pagina bevat:
-
-    kop: De strijd om plek drie
-
-    korte uitleg
-
-    drie wedstrijdblokken met resultaatknoppen
-
-    live-updatende stand rechts
-
-    scenario-indicator: Scenario X van 27
-
-    blok met gekozen uitslagen
-
-    duidelijke markering van de ploeg die in het scenario derde staat.
-
-
-Strijd Om Plek Drie Html
-Aanpassingen:
-
-- ik wil geen WEDSTRIJD 1, WEDSTRIJD 2, WEDSTRIJD 3
-- Scenario pill moet rood zijn
-- Virtuele stand moet Eindstand worden
-- Toon doelsaldo niet in de stand
-- Haal het blok 'plek drie in dit scenario' weg
-- Deze tekst kan weg ' Bij gelijke punten sorteert deze eerste versie op het huidige doelsaldo. Als ook dat gelijk is, blijft de huidige onderlinge volgorde in de uitgangsstand staan.'
-- Haal blok gekozen uitslagen weg
-
-- Neem in de berekening van de stand mee dat bij een gelijkspel het doelsaldo niet wijzigt, maar bij een zege wel. NEC eindigt bij een zege in hun wedstrijd en een gelijkspel bij PSV - Twente dus sowieso boven FC Twente. De stond zegt nu nog dat het om Twente gaat
-
-- Die groene PLEK 3 is leuk. Houd die vormgeving, maar zet daar (CL). Bij plek 4  (EL) en bij plek 5 (PLAY-OFFS)
-
-Ik pas de berekening meteen aan met een minimale marge: een zege telt als plus één doelsaldo voor de winnaar en min één voor de verliezer. Daardoor komt N.E.C. bij winst inderdaad boven Twente als Twente gelijkspeelt.
-
-Aangepast in canvas.
-
-Verwerkt:
-
-    wedstrijdlabels verwijderd
-
-    scenario-pill rood gemaakt
-
-    Virtuele stand gewijzigd naar Eindstand
-
-    doelsaldo uit de zichtbare stand gehaald
-
-    blok Plek drie in dit scenario verwijderd
-
-    blok Gekozen uitslagen verwijderd
-
-    toelichting onderaan verwijderd
-
-    berekening aangepast met minimale marge in doelsaldo bij winst/verlies
-
-    badges toegevoegd:
-
-        plek 3: CL
-
-        plek 4: EL
-
-        plek 5: PLAY-OFFS
-
-De N.E.C.-situatie klopt nu ook: bij winst van N.E.C. en gelijkspel bij PSV - FC Twente komt N.E.C. boven Twente op doelsaldo.
-
-Strijd Om Plek Drie Html
-Als Ajax wint en Twente verliest komen ze op punten gelijk, het doelsaldo wordt dan ook minimaal gelijk, maar omdat meer heeft gescoord, komt Ajax dan boven Twente.
-
-Klopt. Ik voeg doelpunten voor als verborgen tiebreak toe: eerst punten, dan doelsaldo, dan goals voor. In de minimale marge krijgt de winnende ploeg er één goal bij.
-
-Aangepast.
-
-De sortering is nu:
-
-    punten
-
-    doelsaldo
-
-    goals voor
-
-    startvolgorde als laatste fallback
-
-Ik heb de huidige goals voor verborgen toegevoegd:
-
-    FC Twente: 58
-
-    N.E.C.: 75
-
-    Ajax: 62
-
-Daardoor komt Ajax bij winst en verlies van Twente boven FC Twente als het doelsaldo gelijk wordt.
-
-Strijd Om Plek Drie Html
-ik vind die drie kleuren in de stand verwarrend
-
-Als er twee ploegen op hetzelfde aantal punten eindigen, moet er onder de eindstand een blokje verschijnen met daarin de uitleg waarom de ene ploeg boven de andere ploeg eindigt.
-
-Als Go Ahead wint en Ajax een gelijkspel wordt, moet in dat blokje een optie komen om aan te geven met hoeveel doelpunten verschil Go Ahead Eagles wint (aan te passen met een + of -). Als het met 2 goals verschil is, dan eindigt NEC boven Ajax op gescoorde doelpunten, is het 3+ goals dan gaat Ajax op doelsaldo over NEC.
-
-Ik maak de stand rustiger door de rij-kleuren weg te halen en de labels neutraal te houden. Daaronder komt alleen bij gelijke punten een uitlegblok, met in het N.E.C.-Ajax-scenario een aanpasbare marge voor Go Ahead.
-
-Aangepast in canvas.
-
-Nu:
-
-    de drie verschillende rij-kleuren zijn weg
-
-    CL, EL en Play-offs staan als neutrale zwarte labels naast de clubnaam
-
-    onder de eindstand verschijnt alleen een uitlegblok als twee ploegen op hetzelfde puntenaantal eindigen
-
-    dat blok legt uit of de volgorde wordt beslist op doelsaldo of gescoorde doelpunten
-
-    bij winst Go Ahead Eagles en gelijkspel Ajax verschijnt in dat blok een plus/min-knop voor de marge van Go Ahead
-
-    bij 2 goals verschil blijft N.E.C. boven Ajax op gescoorde doelpunten
-
-    bij 3+ goals verschil gaat Ajax boven N.E.C. op doelsaldo
-
-
-Strijd Om Plek Drie Html
-In de eindstand:
-Clubnamen niet dikgedrukt
-Ik wil de kleurtjes terug in die pillbox met CL/EL/Playoffs
-
-Geef in die beslissingbox alleen aan waarom een ploeg boven een ander eindigt, zonder het daadwerkelijke doelsaldo te tonen.
-
-Schuif de tekst 'Eindstand' omhoog, zet rechts daarvan het scenario pillbox
-
-Ik pas nu alleen de presentatie aan: normalere clubnamen, gekleurde Europese labels, compactere header bij de stand en kortere uitleg zonder cijfers.
-
-Aangepast in canvas.
-
-Verwerkt:
-
-    clubnamen in de eindstand zijn niet meer dikgedrukt
-
-    CL, EL en Play-offs hebben weer eigen kleuren in de pillbox
-
-    beslissingbox noemt alleen nog de reden, zonder doelsaldo of goals voor te tonen
-
-    Eindstand staat nu linksboven in het standblok
-
-    scenario-pill staat rechts daarvan op dezelfde regel
-
-
-Strijd Om Plek Drie Html
-maak de plus en min in het scenario van GAE winst bij NEC blauw, net als de kleur bij de keuzes voor winst gelijkspel
-
-Aangepast. De plus- en minknoppen zijn nu blauw, net als de geselecteerde resultaatkeuzes.
-
-Strijd Om Plek Drie Html
-bij winst PSV, winst NEC en winst Ajax (scenario 3) staat nu:
-
-Ajax eindigt boven FC Twente door meer gescoorde doelpunten.
-
-Dit moet worden:
-
-Ajax eindigt boven FC Twente omdat het minimaal hetzelfde doelsaldo heeft én meer doelpunten heeft gemaakt.
-
-Verander ook
-- Beslissing bij gelijke punten
-Is nu allemaal hoofdletters, zet alleen de eerste B in hoofdletter.
-
-- De uitlegtekst staat in een extra wit blokje. Dat is niet nodig. 
-
-- haal in de intro deze tekst weg: 'In totaal zijn er 27 mogelijke scenario's. "
-
-Wijzig de subkop  VI Scenario-tool in 'De 27 scenario's voor een CL-ticket'
-
-Aangepast.
-
-Verwerkt:
-
-    subkop is nu De 27 scenario's voor een CL-ticket
-
-    zin over 27 scenario’s uit de intro gehaald
-
-    Beslissing bij gelijke punten staat niet meer in kapitalen
-
-    uitlegtekst staat niet meer in een extra wit blokje
-
-    tekst bij Ajax boven Twente op goals voor is aangepast naar:
-
-Ajax eindigt boven FC Twente omdat het minimaal hetzelfde doelsaldo heeft én meer doelpunten heeft gemaakt.
-
-Strijd Om Plek Drie Html
- Go Ahead Eagles wint van N.E.C. Met hoeveel doelpunten verschil? 
-
-Dit moet worden
-
-Met hoeveel doelpunten verschil wint Go Ahead Eagles van N.E.C.? 
-
-Aangepast.
-
-Strijd Om Plek Drie Html
-bij 2 goals nederlaag van NEC en gelijkspel Ajax staat nu:
-
-N.E.C. eindigt boven Ajax omdat het minimaal hetzelfde doelsaldo heeft én meer doelpunten heeft gemaakt.
-
-Dit moet een uniek label worden met
-
-N.E.C. heeft hetzelfde doelsaldo als Ajax, maar eindigt op basis van doelpunten voor boven de Amsterdammers.
-
-Aangepast.
-
-Bij gelijke punten, gelijk doelsaldo en N.E.C. boven Ajax op goals voor staat er nu:
-
-N.E.C. heeft hetzelfde doelsaldo als Ajax, maar eindigt op basis van doelpunten voor boven de Amsterdammers.
-
-Strijd Om Plek Drie Html
-Zonder direct iets aan te passen: welke verbeteringen zou ik nog kunnen maken?
-
-Een paar verbeteringen die de tool nog sterker en duidelijker kunnen maken:
-
-1. Leg boven de stand kort uit wat de labels betekenen
-Nu is CL/EL/Play-offs visueel duidelijk, maar je kunt er nog een klein regeltje boven of onder de stand bij zetten:
-
-    Plek 3 geeft recht op Champions League-voorronde, plek 4 op Europa League en plek 5 op play-offs.
-
-Of compacter:
-
-    CL = plek 3, EL = plek 4, Play-offs = plek 5.
-
-2. Maak de startstand zichtbaar vóór de keuzes
-Je kunt boven de wedstrijdblokken een klein blokje zetten:
-Club	Punten	Doelsaldo
-FC Twente	58	+23
-N.E.C.	56	+23
-Ajax	55	+21
-
-Dat helpt de lezer beter snappen waarom bepaalde scenario’s kantelen.
-
-3. Scenario’s inhoudelijk samenvatten
-Naast “Scenario X van 27” zou je kunnen tonen wat de uitkomst betekent:
-
-    N.E.C. grijpt plek drie
-    Ajax klimt alsnog naar plek drie
-    FC Twente houdt plek drie vast
-
-Dat is journalistiek net wat sterker dan alleen de ranglijst.
-
-4. De stand pas ‘Eindstand’ noemen met een kleine nuance
-Omdat de exacte uitslagen niet overal worden ingevuld, is het eigenlijk een eindstand op basis van resultaat en minimale marges. Je zou kunnen kiezen voor:
-
-    Virtuele eindstand
-
-Of onder de stand een klein regeltje:
-
-    Bij zeges rekent deze tool standaard met een minimale marge, tenzij anders aangegeven.
-
-Dat voorkomt discussie over doelsaldo-scenario’s.
-
-5. De Go Ahead-marge alleen tonen als het écht relevant is
-Nu verschijnt hij bij winst Go Ahead en gelijkspel Ajax. Dat is logisch. Je zou hem nóg slimmer kunnen maken door hem alleen te tonen als N.E.C. en Ajax daadwerkelijk gelijk eindigen in punten. Dan voelt het minder technisch.
-
-6. Maak de gekozen uitslagen subtiel zichtbaar in de standkolom
-Je had het blok gekozen uitslagen eerder weggehaald, maar een ultra-compacte variant kan handig zijn. Bijvoorbeeld onder de scenario-pill:
-
-    PSV wint, N.E.C. wint, Ajax wint
-
-Zonder apart blok. Dan ziet de lezer rechts meteen welk scenario hij bekijkt.
-
-7. Voeg een resetknop toe
-Een kleine knop onder de wedstrijden:
-
-    Reset scenario
-
-Die zet alles terug naar de standaardselectie. Handig als lezers veel doorklikken.
-
-8. Maak de scenario-volgorde minder willekeurig
-Scenario 3 is nu technisch correct, maar voor de lezer zegt dat getal weinig. Je zou kunnen overwegen de pillbox te veranderen in:
-
-    Scenario 3 van 27 · Ajax naar plek 3
-
-Dan krijgt het nummer betekenis.
-
-9. Taal in de intro iets scherper maken
-Nu staat er:
-
-    FC Twente begint de slotdag als nummer drie, maar N.E.C. en Ajax liggen nog op de loer.
-
-Kan iets actiever:
-
-    FC Twente heeft plek drie in handen, maar N.E.C. en Ajax kunnen de Tukkers op de slotdag nog passeren.
-
-10. Hover/focus-states voor knoppen
-Voor desktopgebruik voelt de tool net iets professioneler als de resultaatknoppen bij hover subtiel reageren. Voor toegankelijkheid zou ik ook een duidelijke focus-state toevoegen voor toetsenbordgebruik.
-
-Mijn top drie zou zijn: een korte betekenisregel voor CL/EL/Play-offs, een samenvatting van wie in het gekozen scenario derde wordt, en een kleine nuance dat de tool bij zeges met minimale marges rekent.
-
-Strijd Om Plek Drie Html
-ik wil nog een hele kleine footer met daarin:
-
-Gemaakt door Bart Frouws - x.com/bartf 
-
-Gebruik het rode randje dat je nu bovenin hebt gebruikt in het blok 'de strijd om plek drie', maar dan andersom, dus onderaan
-
-Aangepast.
-
-Er staat nu onderaan een kleine footer met:
-
-Gemaakt door Bart Frouws - x.com/bartf
-
-Met hetzelfde rode randje als bovenin, maar dan onderaan de footer.
-
-Strijd Om Plek Drie Html
-haal die footer toch maar weg
-
-Footer is weggehaald.
-
-Strijd Om Plek Drie Html
-ik wil onderaan wel een footer met daarin 1 t/m 27 zodat je snel tussen wisselen tussen de scenario's waarin Twente, NEC en Ajax als 3e eindigen. 
-
-Als het goed is zijn er 19 scenario's goed voor Twente, 6 voor NEC en 2 voor Ajax.
-
-Ik voeg onderaan een compacte scenariokiezer toe met 27 knoppen. De kleur van elk nummer laat zien welke club in dat scenario derde wordt, en klikken zet de drie uitslagen direct goed.
-
-Aangepast.
-
-Onderaan staat nu een footer met:
-
-    knoppen 1 t/m 27 om snel tussen scenario’s te wisselen
-
-    kleuren per club die als derde eindigt:
-
-        FC Twente: blauw
-
-        N.E.C.: rood
-
-        Ajax: groen
-
-    telling erboven:
-
-        FC Twente 19
-
-        N.E.C. 6
-
-        Ajax 2
-
-    actieve scenario krijgt een duidelijke zwarte outline
-
-Klikken op een scenarionummer past de drie resultaatkeuzes automatisch aan.
-
-Strijd Om Plek Drie Html
-ik wil nu eigenlijk dat scenario 1 t/m 19 de scenario's zijn voor twente, de volgende 6 voor NEC en laatste 2 voor ajax
-
-Ik hernummer de scenarioknoppen nu niet meer op de technische volgorde van uitslagen, maar groepeer ze op uitkomst: eerst alle Twente-scenario’s, daarna N.E.C., daarna Ajax.
-
-Aangepast.
-
-De scenarioknoppen zijn nu gegroepeerd:
-
-    1 t/m 19: FC Twente eindigt derde
-
-    20 t/m 25: N.E.C. eindigt derde
-
-    26 en 27: Ajax eindigt derde
-
-Ook de scenario-pill rechtsboven volgt nu deze nieuwe nummering.
-
-Strijd Om Plek Drie Html
-Ik wil nog een kleine gimmick toevoegen: als je meer dan 3 goals toevoegt voor winst Go Ahead Eagles, moet er komen te staan 'Nou nou, je kunt het ook overdrijven he'
-
-Toegevoegd.
-
-Als de marge voor Go Ahead Eagles groter wordt dan 3 goals, verschijnt:
-
-Nou nou, je kunt het ook overdrijven he
-
-Strijd Om Plek Drie Html
-Maak de tekst in italic ipv bold en voeg een knipoog toe
-
-Aangepast.
-
-De gimmicktekst is nu italic in plaats van bold, met een knipoog erbij.
-
-Strijd Om Plek Drie Html
-haal die knipoog weg
-
-De ruimtes tussen blokje met goals en tekst en onder de tekst is niet mooi
-
-Aangepast.
-
-De knipoog is weg en de spacing in het margeblok is compacter gemaakt:
-
-    minder ruimte tussen de goal-knoppen en de gimmicktekst
-
-    iets minder witruimte onderin het blok.
-
-
-Strijd Om Plek Drie Html
-waarom is deze ruimte (in rood) zo groot?
-
-
-Die ruimte komt vooral door de onderste padding van het witte blok zelf.
-
-In jouw code is dit waarschijnlijk de boosdoener:
-
-.margin-control {
-  padding: 12px 12px 10px;
-}
-
-Die laatste 10px is de bottom padding.
-Dus ook als de tekst zelf nauwelijks marge heeft, houdt het blok onderaan nog bewust ruimte vrij.
-
-Daarnaast telt dit ook mee:
-
-.margin-joke {
-  margin: 6px 0 0;
-  line-height: 1.35;
-}
-
-Dus onder de tekst krijg je in de praktijk een optelsom van:
-
-    wat extra hoogte door de line-height
-
-    plus de padding-bottom: 10px van .margin-control
-
-Als je het strakker wilt maken, zit de winst vooral hier:
-
-.margin-control {
-  padding: 12px 12px 4px;
-}
-
-of zelfs:
-
-.margin-control {
-  padding: 12px 12px 2px;
-}
-
-En eventueel ook:
-
-.margin-joke {
-  margin-top: 4px;
-}
-
-Kort gezegd: de ruimte komt niet vooral door de tekst, maar door de bottom padding van het omringende blok.
-
-Als je wilt, kan ik je ook meteen precies zeggen welke 2 CSS-regels je het best kunt vervangen voor de netste spacing.
-
-Strijd Om Plek Drie Html
-Nou nou, je kunt het ook overdrijven he
-
-Missen daar nog leestekens?
-
-Ja, ik zou er dit van maken:
-
-Nou nou, je kunt het ook overdrijven, hè.
-
-Dus:
-
-    komma vóór hè
-
-    accent op hè
-
-    punt erachter
-
-Voor iets luchtiger/spreektaalachtiger kan ook:
-
-Nou nou, je kunt het ook overdrijven, hè
-
-Strijd Om Plek Drie Html
-maak er maar van:
-
-Nou nou, je kunt het ook overdrijven hè.
-
-
-Aangepast.
-
-Strijd Om Plek Drie Html
-dit is de code die ik nu gebruik. Ik wil nog ergens klein mijn naam in zetten 
-
-Bart Frouws (VI) - x.com/bartf
-
-Ik zet hem klein en subtiel onder de scenarioknoppen, rechts uitgelijnd.
-Strijd Om Plek Drie Html· html
 <!doctype html>
 <html lang="nl">
 <head>
@@ -588,13 +68,919 @@ Strijd Om Plek Drie Html· html
     }
 
     .intro {
+      max-width: 780px;
+      margin: 0;
+      color: #343434;
+      font-size: 16px;
+      line-height: 1.55;
+    }
 
-Toegevoegd.
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(310px, 0.75fr);
+      gap: 18px;
+      align-items: start;
+    }
 
-Je naam staat nu klein onder de scenarioknoppen:
+    .panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
 
-Bart Frouws (VI) - x.com/bartf
+    .panel-title {
+      margin: 0 0 14px;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
 
-Op desktop rechts uitgelijnd, op mobiel links zodat het netjes onder de rest valt.
+    .match-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .match-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #fbfbfb;
+    }
+
+    .match-title {
+      margin-bottom: 12px;
+    }
+
+    .match-title strong {
+      font-size: 18px;
+      letter-spacing: -0.01em;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .option {
+      position: relative;
+    }
+
+    .option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .option span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.15;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .option input:checked + span {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(0, 158, 224, 0.22);
+    }
+
+    .standings-card {
+      position: sticky;
+      top: 14px;
+    }
+
+    .standings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .standings-header .panel-title {
+      margin: 0;
+    }
+
+    .scenario-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--red);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+
+    thead th {
+      padding: 10px 8px;
+      background: #eeeeee;
+      color: #565656;
+      font-size: 12px;
+      text-align: right;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    thead th:nth-child(1),
+    thead th:nth-child(2) {
+      text-align: left;
+    }
+
+    tbody td {
+      padding: 12px 8px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+      text-align: right;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    tbody td:nth-child(1),
+    tbody td:nth-child(2) {
+      text-align: left;
+    }
+
+    tbody td:nth-child(1) {
+      width: 32px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    tbody td:nth-child(2) {
+      font-weight: 400;
+    }
+
+    .rank-label {
+      display: inline-flex;
+      margin-left: 8px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+
+    .rank-label.rank-cl {
+      background: var(--green);
+    }
+
+    .rank-label.rank-el {
+      background: var(--orange);
+    }
+
+    .rank-label.rank-playoffs {
+      background: var(--purple);
+    }
+
+    .tie-break-block {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfbfb;
+    }
+
+    .tie-break-block.is-visible {
+      display: block;
+    }
+
+    .tie-break-block h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: var(--red);
+      letter-spacing: 0.01em;
+    }
+
+    .tie-break-list {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tie-break-list li {
+      margin: 0;
+      color: #2f2f2f;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .margin-control {
+      display: none;
+      margin: 0 0 10px;
+      padding: 12px 12px 10px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .margin-control.is-visible {
+      display: block;
+    }
+
+    .margin-control p {
+      margin: 0 0 10px;
+      color: #343434;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .margin-joke {
+      display: none;
+      margin: 6px 0 0;
+      color: var(--red);
+      font-size: 12px;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.35;
+    }
+
+    .margin-joke.is-visible {
+      display: block;
+    }
+
+    .stepper {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stepper button {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .stepper span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 92px;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #161616;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .scenario-footer {
+      margin-top: 18px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px 18px 18px;
+      border-bottom: 7px solid var(--red);
+    }
+
+    .scenario-footer-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .scenario-footer h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .scenario-counts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .scenario-counts span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .scenario-counts span::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #161616;
+    }
+
+    .scenario-counts .count-twente::before {
+      background: var(--blue);
+    }
+
+    .scenario-counts .count-nec::before {
+      background: var(--red);
+    }
+
+    .scenario-counts .count-ajax::before {
+      background: var(--green);
+    }
+
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(27, minmax(0, 1fr));
+      gap: 5px;
+    }
+
+    .scenario-button {
+      min-width: 0;
+      height: 34px;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .scenario-button:hover,
+    .scenario-button.is-active {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    .scenario-button.is-active {
+      outline: 3px solid #161616;
+      outline-offset: 2px;
+    }
+
+    .scenario-button.third-twente {
+      background: var(--blue);
+    }
+
+    .scenario-button.third-nec {
+      background: var(--red);
+    }
+
+    .scenario-button.third-ajax {
+      background: var(--green);
+    }
+
+    .credit-line {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.4;
+      text-align: right;
+    }
+
+    .credit-line a {
+      color: var(--muted);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .credit-line a:hover {
+      color: var(--text);
+      text-decoration: underline;
+    }
 
 
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .standings-card {
+        position: static;
+      }
+
+      .scenario-grid {
+        grid-template-columns: repeat(9, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .hero,
+      .panel {
+        padding: 16px;
+      }
+
+      .options {
+        grid-template-columns: 1fr;
+      }
+
+      .scenario-footer-header {
+        display: block;
+      }
+
+      .scenario-counts {
+        justify-content: flex-start;
+        margin-top: 8px;
+      }
+
+      .scenario-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+
+      .credit-line {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="vi-scenario-tool">
+    <section class="hero">
+      <div class="label">De 27 scenario's voor een CL-ticket</div>
+      <h1>De strijd om plek drie</h1>
+      <p class="intro">
+        FC Twente begint de slotdag als nummer drie, maar N.E.C. en Ajax liggen nog op de loer.
+        Kies hieronder de uitslagen van de drie beslissende wedstrijden en zie direct hoe de stand verandert.
+      </p>
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <h2 class="panel-title">Wedstrijden van zondag</h2>
+
+        <div class="match-list">
+          <article class="match-card" data-match="psv_twente">
+            <div class="match-title">
+              <strong>PSV - FC Twente</strong>
+            </div>
+            <div class="options">
+              <label class="option">
+                <input type="radio" name="psv_twente" value="home" checked>
+                <span>Winst PSV</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="psv_twente" value="draw">
+                <span>Gelijkspel</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="psv_twente" value="away">
+                <span>Winst Twente</span>
+              </label>
+            </div>
+          </article>
+
+          <article class="match-card" data-match="nec_goahead">
+            <div class="match-title">
+              <strong>N.E.C. - Go Ahead Eagles</strong>
+            </div>
+            <div class="options">
+              <label class="option">
+                <input type="radio" name="nec_goahead" value="home" checked>
+                <span>Winst N.E.C.</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="nec_goahead" value="draw">
+                <span>Gelijkspel</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="nec_goahead" value="away">
+                <span>Winst Go Ahead</span>
+              </label>
+            </div>
+          </article>
+
+          <article class="match-card" data-match="heerenveen_ajax">
+            <div class="match-title">
+              <strong>sc Heerenveen - Ajax</strong>
+            </div>
+            <div class="options">
+              <label class="option">
+                <input type="radio" name="heerenveen_ajax" value="home" checked>
+                <span>Winst Heerenveen</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="heerenveen_ajax" value="draw">
+                <span>Gelijkspel</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="heerenveen_ajax" value="away">
+                <span>Winst Ajax</span>
+              </label>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <aside class="panel standings-card">
+        <div class="standings-header">
+          <h2 class="panel-title">Eindstand</h2>
+          <div class="scenario-pill" id="scenarioPill">Scenario 1 van 27</div>
+        </div>
+
+        <table aria-label="Eindstand strijd om plek drie">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Club</th>
+              <th>Pnt</th>
+            </tr>
+          </thead>
+          <tbody id="standingsBody"></tbody>
+        </table>
+
+        <div class="tie-break-block" id="tieBreakBlock">
+          <h3>Beslissing bij gelijke punten</h3>
+
+          <div class="margin-control" id="goAheadMarginControl">
+            <p>
+              Met hoeveel doelpunten verschil wint Go Ahead Eagles van N.E.C.?
+            </p>
+            <div class="stepper" aria-label="Marge Go Ahead Eagles">
+              <button type="button" id="marginMinus" aria-label="Marge verlagen">−</button>
+              <span id="marginValue">1 goal</span>
+              <button type="button" id="marginPlus" aria-label="Marge verhogen">+</button>
+            </div>
+            <p class="margin-joke" id="marginJoke">Nou nou, je kunt het ook overdrijven hè.</p>
+          </div>
+
+          <ul class="tie-break-list" id="tieBreakList"></ul>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="scenario-footer">
+      <div class="scenario-footer-header">
+        <h2>Snel naar scenario</h2>
+        <div class="scenario-counts" aria-label="Aantal scenario's per nummer drie">
+          <span class="count-twente">FC Twente 19</span>
+          <span class="count-nec">N.E.C. 6</span>
+          <span class="count-ajax">Ajax 2</span>
+        </div>
+      </div>
+      <div class="scenario-grid" id="scenarioGrid" aria-label="Scenariokiezer"></div>
+      <p class="credit-line">Bart Frouws (VI) - <a href="https://x.com/bartf" target="_blank" rel="noopener">x.com/bartf</a></p>
+    </footer>
+  </main>
+
+  <script>
+    const startTable = [
+      { club: "FC Twente", points: 58, goalDifference: 23, goalsFor: 58, startRank: 3 },
+      { club: "N.E.C.", points: 56, goalDifference: 23, goalsFor: 75, startRank: 4 },
+      { club: "Ajax", points: 55, goalDifference: 21, goalsFor: 62, startRank: 5 }
+    ];
+
+    let goAheadWinMargin = 1;
+
+    const matches = [
+      {
+        key: "psv_twente",
+        points: {
+          home: { "FC Twente": 0 },
+          draw: { "FC Twente": 1 },
+          away: { "FC Twente": 3 }
+        },
+        goalDifference: {
+          home: { "FC Twente": -1 },
+          draw: { "FC Twente": 0 },
+          away: { "FC Twente": 1 }
+        },
+        goalsFor: {
+          home: { "FC Twente": 0 },
+          draw: { "FC Twente": 0 },
+          away: { "FC Twente": 1 }
+        }
+      },
+      {
+        key: "nec_goahead",
+        points: {
+          home: { "N.E.C.": 3 },
+          draw: { "N.E.C.": 1 },
+          away: { "N.E.C.": 0 }
+        },
+        goalDifference: {
+          home: { "N.E.C.": 1 },
+          draw: { "N.E.C.": 0 },
+          away: { "N.E.C.": () => -goAheadWinMargin }
+        },
+        goalsFor: {
+          home: { "N.E.C.": 1 },
+          draw: { "N.E.C.": 0 },
+          away: { "N.E.C.": 0 }
+        }
+      },
+      {
+        key: "heerenveen_ajax",
+        points: {
+          home: { "Ajax": 0 },
+          draw: { "Ajax": 1 },
+          away: { "Ajax": 3 }
+        },
+        goalDifference: {
+          home: { "Ajax": -1 },
+          draw: { "Ajax": 0 },
+          away: { "Ajax": 1 }
+        },
+        goalsFor: {
+          home: { "Ajax": 0 },
+          draw: { "Ajax": 0 },
+          away: { "Ajax": 1 }
+        }
+      }
+    ];
+
+    const outcomeWeights = {
+      psv_twente: { home: 0, draw: 1, away: 2 },
+      nec_goahead: { home: 0, draw: 1, away: 2 },
+      heerenveen_ajax: { home: 0, draw: 1, away: 2 }
+    };
+
+    function getSelectedOutcome(matchKey) {
+      return document.querySelector(`input[name="${matchKey}"]:checked`).value;
+    }
+
+    const orderedScenarios = [
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "home", nec_goahead: "draw", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "home", nec_goahead: "draw", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "home", nec_goahead: "away", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "home", nec_goahead: "away", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "draw", nec_goahead: "draw", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "draw", nec_goahead: "draw", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "draw", nec_goahead: "draw", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "draw", nec_goahead: "away", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "draw", nec_goahead: "away", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "draw", nec_goahead: "away", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "home", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "home", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "home", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "draw", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "draw", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "draw", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "away", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "away", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "away", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "N.E.C.", selections: { psv_twente: "home", nec_goahead: "home", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "N.E.C.", selections: { psv_twente: "home", nec_goahead: "home", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "N.E.C.", selections: { psv_twente: "home", nec_goahead: "home", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "N.E.C.", selections: { psv_twente: "draw", nec_goahead: "home", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "N.E.C.", selections: { psv_twente: "draw", nec_goahead: "home", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "N.E.C.", selections: { psv_twente: "draw", nec_goahead: "home", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "Ajax", selections: { psv_twente: "home", nec_goahead: "draw", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "Ajax", selections: { psv_twente: "home", nec_goahead: "away", heerenveen_ajax: "away" } }
+    ];
+
+    function selectionsAreEqual(a, b) {
+      return a.psv_twente === b.psv_twente &&
+        a.nec_goahead === b.nec_goahead &&
+        a.heerenveen_ajax === b.heerenveen_ajax;
+    }
+
+    function calculateScenarioNumber(selections) {
+      const index = orderedScenarios.findIndex(scenario => selectionsAreEqual(scenario.selections, selections));
+      return index === -1 ? 1 : index + 1;
+    }
+
+    function getSelections() {
+      return matches.reduce((acc, match) => {
+        acc[match.key] = getSelectedOutcome(match.key);
+        return acc;
+      }, {});
+    }
+
+    function resolveValue(value) {
+      return typeof value === "function" ? value() : value;
+    }
+
+    function calculateTable(selections) {
+      const table = startTable.map(team => ({ ...team }));
+
+      matches.forEach(match => {
+        const selected = selections[match.key];
+        const pointsForOutcome = match.points[selected];
+        const goalDifferenceForOutcome = match.goalDifference[selected];
+        const goalsForOutcome = match.goalsFor[selected];
+
+        Object.entries(pointsForOutcome).forEach(([club, points]) => {
+          const team = table.find(item => item.club === club);
+          if (team) {
+            team.points += resolveValue(points);
+          }
+        });
+
+        Object.entries(goalDifferenceForOutcome).forEach(([club, goalDifference]) => {
+          const team = table.find(item => item.club === club);
+          if (team) {
+            team.goalDifference += resolveValue(goalDifference);
+          }
+        });
+
+        Object.entries(goalsForOutcome).forEach(([club, goalsFor]) => {
+          const team = table.find(item => item.club === club);
+          if (team) {
+            team.goalsFor += resolveValue(goalsFor);
+          }
+        });
+      });
+
+      return table.sort((a, b) => {
+        if (b.points !== a.points) return b.points - a.points;
+        if (b.goalDifference !== a.goalDifference) return b.goalDifference - a.goalDifference;
+        if (b.goalsFor !== a.goalsFor) return b.goalsFor - a.goalsFor;
+        return a.startRank - b.startRank;
+      });
+    }
+
+    function getRankLabel(index) {
+      if (index === 0) return { text: "CL", className: "rank-cl" };
+      if (index === 1) return { text: "EL", className: "rank-el" };
+      return { text: "Play-offs", className: "rank-playoffs" };
+    }
+
+    function renderStandings(table) {
+      const body = document.getElementById("standingsBody");
+      body.innerHTML = "";
+
+      table.forEach((team, index) => {
+        const row = document.createElement("tr");
+
+        const rankLabel = getRankLabel(index);
+
+        row.innerHTML = `
+          <td>${index + 3}</td>
+          <td>${team.club}<span class="rank-label ${rankLabel.className}">${rankLabel.text}</span></td>
+          <td>${team.points}</td>
+        `;
+
+        body.appendChild(row);
+      });
+    }
+
+    function getTieReason(higher, lower) {
+      if (higher.goalDifference !== lower.goalDifference) {
+        return `${higher.club} eindigt boven ${lower.club} door een beter doelsaldo.`;
+      }
+
+      if (higher.goalsFor !== lower.goalsFor) {
+        if (higher.club === "N.E.C." && lower.club === "Ajax") {
+          return "N.E.C. heeft hetzelfde doelsaldo als Ajax, maar eindigt op basis van doelpunten voor boven de Amsterdammers.";
+        }
+
+        return `${higher.club} eindigt boven ${lower.club} omdat het minimaal hetzelfde doelsaldo heeft én meer doelpunten heeft gemaakt.`;
+      }
+
+      return `${higher.club} eindigt boven ${lower.club} op basis van de huidige volgorde als laatste fallback.`;
+    }
+
+    function getTieBreakExplanations(table) {
+      const explanations = [];
+
+      for (let i = 0; i < table.length - 1; i += 1) {
+        const higher = table[i];
+        const lower = table[i + 1];
+
+        if (higher.points === lower.points) {
+          explanations.push(getTieReason(higher, lower));
+        }
+      }
+
+      return explanations;
+    }
+
+    function renderTieBreakBlock(table, selections) {
+      const block = document.getElementById("tieBreakBlock");
+      const list = document.getElementById("tieBreakList");
+      const marginControl = document.getElementById("goAheadMarginControl");
+      const explanations = getTieBreakExplanations(table);
+      const showGoAheadMarginControl = selections.nec_goahead === "away" && selections.heerenveen_ajax === "draw";
+
+      marginControl.classList.toggle("is-visible", showGoAheadMarginControl);
+      list.innerHTML = "";
+
+      if (explanations.length === 0) {
+        block.classList.remove("is-visible");
+        return;
+      }
+
+      block.classList.add("is-visible");
+
+      explanations.forEach(explanation => {
+        const item = document.createElement("li");
+        item.textContent = explanation;
+        list.appendChild(item);
+      });
+    }
+
+    function updateMarginLabel() {
+      document.getElementById("marginValue").textContent = `${goAheadWinMargin} ${goAheadWinMargin === 1 ? "goal" : "goals"}`;
+      document.getElementById("marginJoke").classList.toggle("is-visible", goAheadWinMargin > 3);
+    }
+
+    function getSelectionsByScenarioNumber(scenarioNumber) {
+      const scenario = orderedScenarios[scenarioNumber - 1] || orderedScenarios[0];
+      return { ...scenario.selections };
+    }
+
+    function setScenario(scenarioNumber) {
+      const selections = getSelectionsByScenarioNumber(scenarioNumber);
+
+      Object.entries(selections).forEach(([matchKey, outcome]) => {
+        const input = document.querySelector(`input[name="${matchKey}"][value="${outcome}"]`);
+        if (input) input.checked = true;
+      });
+
+      updateTool();
+    }
+
+    function getThirdPlaceClass(club) {
+      if (club === "FC Twente") return "third-twente";
+      if (club === "N.E.C.") return "third-nec";
+      return "third-ajax";
+    }
+
+    function renderScenarioGrid(activeScenarioNumber) {
+      const grid = document.getElementById("scenarioGrid");
+      grid.innerHTML = "";
+
+      for (let scenarioNumber = 1; scenarioNumber <= 27; scenarioNumber += 1) {
+        const scenario = orderedScenarios[scenarioNumber - 1];
+        const selections = getSelectionsByScenarioNumber(scenarioNumber);
+        const thirdPlaceTeam = scenario.thirdPlaceTeam;
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = `scenario-button ${getThirdPlaceClass(thirdPlaceTeam)}`;
+        button.textContent = scenarioNumber;
+        button.title = `Scenario ${scenarioNumber}: ${thirdPlaceTeam} eindigt als derde`;
+        button.setAttribute("aria-label", `Scenario ${scenarioNumber}: ${thirdPlaceTeam} eindigt als derde`);
+
+        if (scenarioNumber === activeScenarioNumber) {
+          button.classList.add("is-active");
+        }
+
+        button.addEventListener("click", () => setScenario(scenarioNumber));
+        grid.appendChild(button);
+      }
+    }
+
+    function updateTool() {
+      const selections = getSelections();
+      const table = calculateTable(selections);
+      const scenarioNumber = calculateScenarioNumber(selections);
+
+      document.getElementById("scenarioPill").textContent = `Scenario ${scenarioNumber} van 27`;
+      updateMarginLabel();
+      renderStandings(table);
+      renderTieBreakBlock(table, selections);
+      renderScenarioGrid(scenarioNumber);
+    }
+
+    document.querySelectorAll("input[type='radio']").forEach(input => {
+      input.addEventListener("change", updateTool);
+    });
+
+    document.getElementById("marginMinus").addEventListener("click", () => {
+      goAheadWinMargin = Math.max(1, goAheadWinMargin - 1);
+      updateTool();
+    });
+
+    document.getElementById("marginPlus").addEventListener("click", () => {
+      goAheadWinMargin += 1;
+      updateTool();
+    });
+
+    updateTool();
+  </script>
+</body>
+</html>
