@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>De strijd om plek drie</title>
+
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --card: #ffffff;
+      --text: #161616;
+      --muted: #6b7280;
+      --line: #d9d9d9;
+      --red: #e2001a;
+      --blue: #009ee0;
+      --green: #16a34a;
+      --orange: #f97316;
+      --purple: #7c3aed;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .vi-scenario-tool {
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 14px 28px;
+    }
+
+    .hero {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      border-top: 7px solid var(--red);
+      margin-bottom: 18px;
+    }
+
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 5vw, 48px);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .intro {
+      max-width: 780px;
+      margin: 0;
+      color: #343434;
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(310px, 0.75fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .panel-title {
+      margin: 0 0 14px;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .match-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .match-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #fbfbfb;
+    }
+
+    .match-title {
+      margin-bottom: 12px;
+    }
+
+    .match-title strong {
+      font-size: 18px;
+      letter-spacing: -0.01em;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .option {
+      position: relative;
+    }
+
+    .option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .option span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.15;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .option input:checked + span {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(0, 158, 224, 0.22);
+    }
+
+    .standings-card {
+      position: sticky;
+      top: 14px;
+    }
+
+    .standings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .standings-header .panel-title {
+      margin: 0;
+    }
+
+    .scenario-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--red);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+
+    thead th {
+      padding: 10px 8px;
+      background: #eeeeee;
+      color: #565656;
+      font-size: 12px;
+      text-align: right;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    thead th:nth-child(1),
+    thead th:nth-child(2) {
+      text-align: left;
+    }
+
+    tbody td {
+      padding: 12px 8px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+      text-align: right;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    tbody td:nth-child(1),
+    tbody td:nth-child(2) {
+      text-align: left;
+    }
+
+    tbody td:nth-child(1) {
+      width: 32px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    tbody td:nth-child(2) {
+      font-weight: 400;
+    }
+
+    .rank-label {
+      display: inline-flex;
+      margin-left: 8px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+
+    .rank-label.rank-cl {
+      background: var(--green);
+    }
+
+    .rank-label.rank-el {
+      background: var(--orange);
+    }
+
+    .rank-label.rank-playoffs {
+      background: var(--purple);
+    }
+
+    .tie-break-block {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfbfb;
+    }
+
+    .tie-break-block.is-visible {
+      display: block;
+    }
+
+    .tie-break-block h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: var(--red);
+      letter-spacing: 0.01em;
+    }
+
+    .tie-break-list {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tie-break-list li {
+      margin: 0;
+      color: #2f2f2f;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .margin-control {
+      display: none;
+      margin: 0 0 10px;
+      padding: 12px 12px 10px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .margin-control.is-visible {
+      display: block;
+    }
+
+    .margin-control p {
+      margin: 0 0 10px;
+      color: #343434;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .margin-joke {
+      display: none;
+      margin: 6px 0 0;
+      color: var(--red);
+      font-size: 12px;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.35;
+    }
+
+    .margin-joke.is-visible {
+      display: block;
+    }
+
+    .stepper {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stepper button {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .stepper span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 92px;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #161616;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .scenario-footer {
+      margin-top: 18px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px 18px 18px;
+      border-bottom: 7px solid var(--red);
+    }
+
+    .scenario-footer-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .scenario-footer h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .scenario-counts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .scenario-counts span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .scenario-counts span::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #161616;
+    }
+
+    .scenario-counts .count-twente::before {
+      background: var(--blue);
+    }
+
+    .scenario-counts .count-nec::before {
+      background: var(--red);
+    }
+
+    .scenario-counts .count-ajax::before {
+      background: var(--green);
+    }
+
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(27, minmax(0, 1fr));
+      gap: 5px;
+    }
+
+    .scenario-button {
+      min-width: 0;
+      height: 34px;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .scenario-button:hover,
+    .scenario-button.is-active {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    .scenario-button.is-active {
+      outline: 3px solid #161616;
+      outline-offset: 2px;
+    }
+
+    .scenario-button.third-twente {
+      background: var(--blue);
+    }
+
+    .scenario-button.third-nec {
+      background: var(--red);
+    }
+
+    .scenario-button.third-ajax {
+      background: var(--green);
+    }
+
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .standings-card {
+        position: static;
+      }
+
+      .scenario-grid {
+        grid-template-columns: repeat(9, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .hero,
+      .panel {
+        padding: 16px;
+      }
+
+      .options {
+        grid-template-columns: 1fr;
+      }
+
+      .scenario-footer-header {
+        display: block;
+      }
+
+      .scenario-counts {
+        justify-content: flex-start;
+        margin-top: 8px;
+      }
+
+      .scenario-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="vi-scenario-tool">
+    <section class="hero">
+      <div class="label">De 27 scenario's voor een CL-ticket</div>
+      <h1>De strijd om plek drie</h1>
+      <p class="intro">
+        FC Twente begint de slotdag als nummer drie, maar N.E.C. en Ajax liggen nog op de loer.
+        Kies hieronder de uitslagen van de drie beslissende wedstrijden en zie direct hoe de stand verandert.
+      </p>
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <h2 class="panel-title">Wedstrijden van zondag</h2>
+
+        <div class="match-list">
+          <article class="match-card" data-match="psv_twente">
+            <div class="match-title">
+              <strong>PSV - FC Twente</strong>
+            </div>
+            <div class="options">
+              <label class="option">
+                <input type="radio" name="psv_twente" value="home" checked>
+                <span>Winst PSV</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="psv_twente" value="draw">
+                <span>Gelijkspel</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="psv_twente" value="away">
+                <span>Winst Twente</span>
+              </label>
+            </div>
+          </article>
+
+          <article class="match-card" data-match="nec_goahead">
+            <div class="match-title">
+              <strong>N.E.C. - Go Ahead Eagles</strong>
+            </div>
+            <div class="options">
+              <label class="option">
+                <input type="radio" name="nec_goahead" value="home" checked>
+                <span>Winst N.E.C.</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="nec_goahead" value="draw">
+                <span>Gelijkspel</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="nec_goahead" value="away">
+                <span>Winst Go Ahead</span>
+              </label>
+            </div>
+          </article>
+
+          <article class="match-card" data-match="heerenveen_ajax">
+            <div class="match-title">
+              <strong>sc Heerenveen - Ajax</strong>
+            </div>
+            <div class="options">
+              <label class="option">
+                <input type="radio" name="heerenveen_ajax" value="home" checked>
+                <span>Winst Heerenveen</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="heerenveen_ajax" value="draw">
+                <span>Gelijkspel</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="heerenveen_ajax" value="away">
+                <span>Winst Ajax</span>
+              </label>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <aside class="panel standings-card">
+        <div class="standings-header">
+          <h2 class="panel-title">Eindstand</h2>
+          <div class="scenario-pill" id="scenarioPill">Scenario 1 van 27</div>
+        </div>
+
+        <table aria-label="Eindstand strijd om plek drie">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Club</th>
+              <th>Pnt</th>
+            </tr>
+          </thead>
+          <tbody id="standingsBody"></tbody>
+        </table>
+
+        <div class="tie-break-block" id="tieBreakBlock">
+          <h3>Beslissing bij gelijke punten</h3>
+
+          <div class="margin-control" id="goAheadMarginControl">
+            <p>
+              Met hoeveel doelpunten verschil wint Go Ahead Eagles van N.E.C.?
+            </p>
+            <div class="stepper" aria-label="Marge Go Ahead Eagles">
+              <button type="button" id="marginMinus" aria-label="Marge verlagen">−</button>
+              <span id="marginValue">1 goal</span>
+              <button type="button" id="marginPlus" aria-label="Marge verhogen">+</button>
+            </div>
+            <p class="margin-joke" id="marginJoke">Nou nou, je kunt het ook overdrijven hè.</p>
+          </div>
+
+          <ul class="tie-break-list" id="tieBreakList"></ul>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="scenario-footer">
+      <div class="scenario-footer-header">
+        <h2>Snel naar scenario</h2>
+        <div class="scenario-counts" aria-label="Aantal scenario's per nummer drie">
+          <span class="count-twente">FC Twente 19</span>
+          <span class="count-nec">N.E.C. 6</span>
+          <span class="count-ajax">Ajax 2</span>
+        </div>
+      </div>
+      <div class="scenario-grid" id="scenarioGrid" aria-label="Scenariokiezer"></div>
+    </footer>
+  </main>
+
+  <script>
+    const startTable = [
+      { club: "FC Twente", points: 58, goalDifference: 23, goalsFor: 58, startRank: 3 },
+      { club: "N.E.C.", points: 56, goalDifference: 23, goalsFor: 75, startRank: 4 },
+      { club: "Ajax", points: 55, goalDifference: 21, goalsFor: 62, startRank: 5 }
+    ];
+
+    let goAheadWinMargin = 1;
+
+    const matches = [
+      {
+        key: "psv_twente",
+        points: {
+          home: { "FC Twente": 0 },
+          draw: { "FC Twente": 1 },
+          away: { "FC Twente": 3 }
+        },
+        goalDifference: {
+          home: { "FC Twente": -1 },
+          draw: { "FC Twente": 0 },
+          away: { "FC Twente": 1 }
+        },
+        goalsFor: {
+          home: { "FC Twente": 0 },
+          draw: { "FC Twente": 0 },
+          away: { "FC Twente": 1 }
+        }
+      },
+      {
+        key: "nec_goahead",
+        points: {
+          home: { "N.E.C.": 3 },
+          draw: { "N.E.C.": 1 },
+          away: { "N.E.C.": 0 }
+        },
+        goalDifference: {
+          home: { "N.E.C.": 1 },
+          draw: { "N.E.C.": 0 },
+          away: { "N.E.C.": () => -goAheadWinMargin }
+        },
+        goalsFor: {
+          home: { "N.E.C.": 1 },
+          draw: { "N.E.C.": 0 },
+          away: { "N.E.C.": 0 }
+        }
+      },
+      {
+        key: "heerenveen_ajax",
+        points: {
+          home: { "Ajax": 0 },
+          draw: { "Ajax": 1 },
+          away: { "Ajax": 3 }
+        },
+        goalDifference: {
+          home: { "Ajax": -1 },
+          draw: { "Ajax": 0 },
+          away: { "Ajax": 1 }
+        },
+        goalsFor: {
+          home: { "Ajax": 0 },
+          draw: { "Ajax": 0 },
+          away: { "Ajax": 1 }
+        }
+      }
+    ];
+
+    const outcomeWeights = {
+      psv_twente: { home: 0, draw: 1, away: 2 },
+      nec_goahead: { home: 0, draw: 1, away: 2 },
+      heerenveen_ajax: { home: 0, draw: 1, away: 2 }
+    };
+
+    function getSelectedOutcome(matchKey) {
+      return document.querySelector(`input[name="${matchKey}"]:checked`).value;
+    }
+
+    const orderedScenarios = [
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "home", nec_goahead: "draw", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "home", nec_goahead: "draw", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "home", nec_goahead: "away", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "home", nec_goahead: "away", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "draw", nec_goahead: "draw", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "draw", nec_goahead: "draw", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "draw", nec_goahead: "draw", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "draw", nec_goahead: "away", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "draw", nec_goahead: "away", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "draw", nec_goahead: "away", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "home", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "home", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "home", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "draw", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "draw", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "draw", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "away", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "away", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "FC Twente", selections: { psv_twente: "away", nec_goahead: "away", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "N.E.C.", selections: { psv_twente: "home", nec_goahead: "home", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "N.E.C.", selections: { psv_twente: "home", nec_goahead: "home", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "N.E.C.", selections: { psv_twente: "home", nec_goahead: "home", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "N.E.C.", selections: { psv_twente: "draw", nec_goahead: "home", heerenveen_ajax: "home" } },
+      { thirdPlaceTeam: "N.E.C.", selections: { psv_twente: "draw", nec_goahead: "home", heerenveen_ajax: "draw" } },
+      { thirdPlaceTeam: "N.E.C.", selections: { psv_twente: "draw", nec_goahead: "home", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "Ajax", selections: { psv_twente: "home", nec_goahead: "draw", heerenveen_ajax: "away" } },
+      { thirdPlaceTeam: "Ajax", selections: { psv_twente: "home", nec_goahead: "away", heerenveen_ajax: "away" } }
+    ];
+
+    function selectionsAreEqual(a, b) {
+      return a.psv_twente === b.psv_twente &&
+        a.nec_goahead === b.nec_goahead &&
+        a.heerenveen_ajax === b.heerenveen_ajax;
+    }
+
+    function calculateScenarioNumber(selections) {
+      const index = orderedScenarios.findIndex(scenario => selectionsAreEqual(scenario.selections, selections));
+      return index === -1 ? 1 : index + 1;
+    }
+
+    function getSelections() {
+      return matches.reduce((acc, match) => {
+        acc[match.key] = getSelectedOutcome(match.key);
+        return acc;
+      }, {});
+    }
+
+    function resolveValue(value) {
+      return typeof value === "function" ? value() : value;
+    }
+
+    function calculateTable(selections) {
+      const table = startTable.map(team => ({ ...team }));
+
+      matches.forEach(match => {
+        const selected = selections[match.key];
+        const pointsForOutcome = match.points[selected];
+        const goalDifferenceForOutcome = match.goalDifference[selected];
+        const goalsForOutcome = match.goalsFor[selected];
+
+        Object.entries(pointsForOutcome).forEach(([club, points]) => {
+          const team = table.find(item => item.club === club);
+          if (team) {
+            team.points += resolveValue(points);
+          }
+        });
+
+        Object.entries(goalDifferenceForOutcome).forEach(([club, goalDifference]) => {
+          const team = table.find(item => item.club === club);
+          if (team) {
+            team.goalDifference += resolveValue(goalDifference);
+          }
+        });
+
+        Object.entries(goalsForOutcome).forEach(([club, goalsFor]) => {
+          const team = table.find(item => item.club === club);
+          if (team) {
+            team.goalsFor += resolveValue(goalsFor);
+          }
+        });
+      });
+
+      return table.sort((a, b) => {
+        if (b.points !== a.points) return b.points - a.points;
+        if (b.goalDifference !== a.goalDifference) return b.goalDifference - a.goalDifference;
+        if (b.goalsFor !== a.goalsFor) return b.goalsFor - a.goalsFor;
+        return a.startRank - b.startRank;
+      });
+    }
+
+    function getRankLabel(index) {
+      if (index === 0) return { text: "CL", className: "rank-cl" };
+      if (index === 1) return { text: "EL", className: "rank-el" };
+      return { text: "Play-offs", className: "rank-playoffs" };
+    }
+
+    function renderStandings(table) {
+      const body = document.getElementById("standingsBody");
+      body.innerHTML = "";
+
+      table.forEach((team, index) => {
+        const row = document.createElement("tr");
+
+        const rankLabel = getRankLabel(index);
+
+        row.innerHTML = `
+          <td>${index + 3}</td>
+          <td>${team.club}<span class="rank-label ${rankLabel.className}">${rankLabel.text}</span></td>
+          <td>${team.points}</td>
+        `;
+
+        body.appendChild(row);
+      });
+    }
+
+    function getTieReason(higher, lower) {
+      if (higher.goalDifference !== lower.goalDifference) {
+        return `${higher.club} eindigt boven ${lower.club} door een beter doelsaldo.`;
+      }
+
+      if (higher.goalsFor !== lower.goalsFor) {
+        if (higher.club === "N.E.C." && lower.club === "Ajax") {
+          return "N.E.C. heeft hetzelfde doelsaldo als Ajax, maar eindigt op basis van doelpunten voor boven de Amsterdammers.";
+        }
+
+        return `${higher.club} eindigt boven ${lower.club} omdat het minimaal hetzelfde doelsaldo heeft én meer doelpunten heeft gemaakt.`;
+      }
+
+      return `${higher.club} eindigt boven ${lower.club} op basis van de huidige volgorde als laatste fallback.`;
+    }
+
+    function getTieBreakExplanations(table) {
+      const explanations = [];
+
+      for (let i = 0; i < table.length - 1; i += 1) {
+        const higher = table[i];
+        const lower = table[i + 1];
+
+        if (higher.points === lower.points) {
+          explanations.push(getTieReason(higher, lower));
+        }
+      }
+
+      return explanations;
+    }
+
+    function renderTieBreakBlock(table, selections) {
+      const block = document.getElementById("tieBreakBlock");
+      const list = document.getElementById("tieBreakList");
+      const marginControl = document.getElementById("goAheadMarginControl");
+      const explanations = getTieBreakExplanations(table);
+      const showGoAheadMarginControl = selections.nec_goahead === "away" && selections.heerenveen_ajax === "draw";
+
+      marginControl.classList.toggle("is-visible", showGoAheadMarginControl);
+      list.innerHTML = "";
+
+      if (explanations.length === 0) {
+        block.classList.remove("is-visible");
+        return;
+      }
+
+      block.classList.add("is-visible");
+
+      explanations.forEach(explanation => {
+        const item = document.createElement("li");
+        item.textContent = explanation;
+        list.appendChild(item);
+      });
+    }
+
+    function updateMarginLabel() {
+      document.getElementById("marginValue").textContent = `${goAheadWinMargin} ${goAheadWinMargin === 1 ? "goal" : "goals"}`;
+      document.getElementById("marginJoke").classList.toggle("is-visible", goAheadWinMargin > 3);
+    }
+
+    function getSelectionsByScenarioNumber(scenarioNumber) {
+      const scenario = orderedScenarios[scenarioNumber - 1] || orderedScenarios[0];
+      return { ...scenario.selections };
+    }
+
+    function setScenario(scenarioNumber) {
+      const selections = getSelectionsByScenarioNumber(scenarioNumber);
+
+      Object.entries(selections).forEach(([matchKey, outcome]) => {
+        const input = document.querySelector(`input[name="${matchKey}"][value="${outcome}"]`);
+        if (input) input.checked = true;
+      });
+
+      updateTool();
+    }
+
+    function getThirdPlaceClass(club) {
+      if (club === "FC Twente") return "third-twente";
+      if (club === "N.E.C.") return "third-nec";
+      return "third-ajax";
+    }
+
+    function renderScenarioGrid(activeScenarioNumber) {
+      const grid = document.getElementById("scenarioGrid");
+      grid.innerHTML = "";
+
+      for (let scenarioNumber = 1; scenarioNumber <= 27; scenarioNumber += 1) {
+        const scenario = orderedScenarios[scenarioNumber - 1];
+        const selections = getSelectionsByScenarioNumber(scenarioNumber);
+        const thirdPlaceTeam = scenario.thirdPlaceTeam;
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = `scenario-button ${getThirdPlaceClass(thirdPlaceTeam)}`;
+        button.textContent = scenarioNumber;
+        button.title = `Scenario ${scenarioNumber}: ${thirdPlaceTeam} eindigt als derde`;
+        button.setAttribute("aria-label", `Scenario ${scenarioNumber}: ${thirdPlaceTeam} eindigt als derde`);
+
+        if (scenarioNumber === activeScenarioNumber) {
+          button.classList.add("is-active");
+        }
+
+        button.addEventListener("click", () => setScenario(scenarioNumber));
+        grid.appendChild(button);
+      }
+    }
+
+    function updateTool() {
+      const selections = getSelections();
+      const table = calculateTable(selections);
+      const scenarioNumber = calculateScenarioNumber(selections);
+
+      document.getElementById("scenarioPill").textContent = `Scenario ${scenarioNumber} van 27`;
+      updateMarginLabel();
+      renderStandings(table);
+      renderTieBreakBlock(table, selections);
+      renderScenarioGrid(scenarioNumber);
+    }
+
+    document.querySelectorAll("input[type='radio']").forEach(input => {
+      input.addEventListener("change", updateTool);
+    });
+
+    document.getElementById("marginMinus").addEventListener("click", () => {
+      goAheadWinMargin = Math.max(1, goAheadWinMargin - 1);
+      updateTool();
+    });
+
+    document.getElementById("marginPlus").addEventListener("click", () => {
+      goAheadWinMargin += 1;
+      updateTool();
+    });
+
+    updateTool();
+  </script>
+</body>
+</html>
